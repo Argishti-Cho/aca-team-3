@@ -69,3 +69,12 @@ else
   echo "Error: Subnet argument must be private or public"
 fi
 
+#check ip address
+
+ip="$1"
+
+if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "success"
+else
+  echo "fail"
+fi
