@@ -23,5 +23,10 @@ sudo apt-get install jenkins -y
 # uid                      Jenkins Project 
 # sub   rsa4096 2023-03-27 [E] [expires: 2026-03-26]
 
+#5
+# sudo system start jenkins
+# don't forget to open 8080 port
+
+
 #You will need to explicitly install a supported Java runtime environment (JRE), 
 # either from your distribution (as described above) or another Java vendor (e.g., Adoptium).
