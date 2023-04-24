@@ -149,11 +149,17 @@ create_vpc() {
                 }
             ]
         }]'
+
     # add tags -14
-    # Add a tag to the VPC
+    # add tags insrance name  
+    aws ec2 create-tags \
+        --resources $INSTANCE_ID \
+        --tags "Key=Name,Value=TBD"
+
+    # Add a tag to the VPC    
     aws ec2 create-tags \
         --resources $AWS_VPC_ID \
-        --tags "Key=Name,Value=aca-vpc-security-group-"
+        --tags "Key=Name,Value=aca-vpc-security-group"
 
     # Add a tag to public subnet
     aws ec2 create-tags \
