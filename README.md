@@ -9,10 +9,6 @@ Before you begin, you will need to have an AWS account and an IAM user with the 
 Getting Started
 To create an EC2 instance, S3 bucket, and install Jenkins, follow these steps:
 
-Clone this repository to your local machine.
-
-Update the aws_ec2_instance.sh script with your AWS configuration, including your key pair, security group ID, and subnet ID.
-
 Run the aws_ec2_instance.sh script to create the EC2 instance.
 
 Update the create-s3-bucket.sh script with your AWS configuration and the necessary details for your S3 bucket.
