@@ -5,6 +5,7 @@ createVpc="vpc_ids"
 write_vpc_to_file() {
     echo $AWS_VPC >> $createVpc
 }
+# CUSTOM_TCP = $1
 create_vpc() {
 
     trap write_vpc_to_file EXIT
@@ -148,6 +149,19 @@ create_vpc() {
                     "Description": "Custom Port"
                 }
             ]
+        }]'&&
+    aws ec2 authorize-security-group-ingress \
+        --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+        --ip-permissions '[{
+            "IpProtocol": "tcp",
+            "FromPort": $CUSTOM_TCP, 
+            "ToPort": $CUSTOM_TCP,
+            "IpRanges": [
+                {
+                    "CidrIp": "0.0.0.0/0",
+                    "Description": "Custom Port"
+                }
+            ]
         }]'
 
     # add tags -14
@@ -178,22 +192,21 @@ create_vpc() {
         --output text)
     AWS_VPC="$AWS_VPC $AWS_DEFAULT_ROUTE_TABLE_ID"
     echo "Created AWS DEFAULT ROUTE TABLE ID $AWS_DEFAULT_ROUTE_TABLE_ID"
-    # sleep 2
 
     CURRENT_TIME=$(date '+%Y-%m-%d_%H-%M-%S')
+    KEY_PAIR_NAME="key-pair-$CURRENT_TIME"
     AWS_KEY_PAIR_NAME=$(aws ec2 create-key-pair \
-        --key-name "key-pair-{$CURRENT_TIME}" \
+        --key-name $KEY_PAIR_NAME \
         --query 'KeyMaterial' \
         --output text > aca-key-pair.pem)
     AWS_VPC="$AWS_VPC $AWS_KEY_PAIR_NAME"
-    echo "Created Key Pair is  my-key-pair"
-    # sleep 2
+    echo "Created Key pair is  $KEY_PAIR_NAME"
+    aws describe-key-pairs --key-name $KEY_PAIR_NAME
 
-    aws describe-key-pair --key-name my-key-pair
     # Add a tag to the default route table
     aws ec2 create-tags \
         --resources $AWS_DEFAULT_ROUTE_TABLE_ID \
-        --tags "Key=Name, Value=aca-vpc-security-group-default-route-table"
+        --tags "Key=Name, Value=aca-default-route-table"
 
     # Add a tag to the public route table
     aws ec2 create-tags \
